@@ -181,7 +181,7 @@ cmd_create_bundle() {
     # TODO: -f option which always overwrites $dest.
 
     case $# in
-        0)
+        0|1)
             if [ -z "$SETUPENV_ID" ]; then
                 # Not in env
                 echo "create-bundle: bundle name was omitted but not in env." >&2
@@ -189,8 +189,12 @@ cmd_create_bundle() {
             fi
 
             local src="$(get_lock_file "$SETUPENV_ID")"
-            local basename="$(basename "$src")"
-            local dest="$HOME/.setupenv/bundle/$basename"
+            local dest_dir="$HOME/.setupenv/bundle"
+            if [ $# = 0 ]; then
+                local dest="$dest_dir/$(basename "$src")"
+            else
+                local dest="$dest_dir/$1"
+            fi
             if [ -e "$dest" ]; then
                 echo "error: path '$dest' already exists." >&2
                 exit 1
