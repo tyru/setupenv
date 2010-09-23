@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # TODO:
-# - List active env(s)
 # - Show if current shell is in env
 # XXX:
 # - lib/ and lib/pkgconfig/ directories are fixed path?
@@ -42,6 +41,10 @@ get_lock_id() {
         [ ! -e "$file" ] && break
     done
     echo "$id"
+}
+
+get_all_lock_files() {
+    echo /tmp/setupenv-*
 }
 
 cmd_shell() {
@@ -90,6 +93,13 @@ cmd_shell() {
         echo "No lib/ dir(s) found. exit." >&2
         exit 1
     fi
+}
+
+cmd_list() {
+    local file
+    for file in `get_all_lock_files`; do
+        echo "$file: $(cat "$file")"
+    done
 }
 
 
