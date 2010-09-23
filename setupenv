@@ -50,8 +50,11 @@ get_lock_id() {
     echo "$id"
 }
 
-get_all_lock_files() {
-    echo /tmp/setupenv/*
+get_all_lock_ids() {
+    local file
+    for file in /tmp/setupenv/*; do
+        echo "$(basename "$file")"
+    done
 }
 
 cmd_shell() {
@@ -114,10 +117,10 @@ cmd_shell() {
 }
 
 cmd_list() {
-    local file
-    # TODO: get_all_lock_ids
-    for file in `get_all_lock_files`; do
-        echo "$file: $(cat "$file")"
+    local id file
+    for id in "$(get_all_lock_ids)"; do
+        local file="$(get_lock_file "$id")"
+        echo "$id: $(cat "$file")"
     done
 }
 
