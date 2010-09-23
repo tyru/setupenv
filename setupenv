@@ -12,9 +12,21 @@ true=:
 false=/bin/false
 
 
-usage() {
+cmd_help() {
     progname="$(dirname "$0")"
-    echo "Usage: $progname proj_dir [proj_dir2 ...]" >&2
+    cat <<EOM
+    Usage
+
+        $progname command [args ...]
+
+    Commands
+
+        help
+            Show help.
+
+        shell proj_dir [proj_dir2 ...]
+            Add and set up new shell.
+EOM
     exit 1
 }
 
@@ -65,7 +77,7 @@ cmd_shell() {
 
 
 
-[ $# = 0 ] && usage
+[ $# = 0 ] && cmd_help
 subcmd="$1"
 shift
 cmd_$subcmd "$@"
