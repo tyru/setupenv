@@ -95,7 +95,7 @@ cmd_shell() {
         export SETUPENV_ID=`get_lock_id`
 
         create_lock_dir
-        local file=`get_lock_file "$SETUPENV_ID"`
+        local file="`get_lock_file "$SETUPENV_ID"`"
         echo "$*" >"$file"
 
         $SHELL    # XXX: Trap error
