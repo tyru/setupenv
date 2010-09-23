@@ -188,7 +188,7 @@ cmd_create_bundle() {
 
             local file="$(get_lock_file "$SETUPENV_ID")"
             cp "$file" "$HOME/.setupenv/bundle"
-            echo "Created bundle: $HOME/.setupenv/bundle/$file"    # TODO: More better filename (prompt to user?)
+            echo "Created bundle: $HOME/.setupenv/bundle/$(basename "$file")"    # TODO: More better filename (prompt to user?)
             ;;
     esac
 }
