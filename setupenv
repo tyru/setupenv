@@ -82,6 +82,7 @@ get_all_lock_ids() {
 }
 
 cmd_shell() {
+    [ $# = 0 ] && return
     local changed=$false
 
     if [ ! -z "$SETUPENV_ID" ]; then
