@@ -95,6 +95,7 @@ cmd_shell() {
 
 cmd_list() {
     local file
+    # TODO: get_all_lock_ids
     for file in `get_all_lock_files`; do
         echo "$file: $(cat "$file")"
     done
