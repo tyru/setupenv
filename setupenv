@@ -130,7 +130,10 @@ cmd_shell() {
 
         create_lock_dir
         local file="`get_lock_file "$SETUPENV_ID"`"
-        echo "$*" >"$file"
+        echo "$*" >"$file" || {
+            echo "Could not write to '$file'." >&2
+            exit 1
+        }
 
         $SHELL    # XXX: Trap error
 
