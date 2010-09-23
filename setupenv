@@ -164,6 +164,35 @@ cmd_in() {
     fi
 }
 
+create_config_dir() {
+    local dir
+    for dir in "$HOME/.setupenv" "$HOME/.setupenv/bundle"; do
+        mkdir -p "$dir"
+        if [ ! -d "$dir" ]; then
+            echo "Can't create config dir: $dir" >&2
+            exit 1
+        fi
+    done
+}
+
+cmd_create_bundle() {
+    create_config_dir
+
+    case $# in
+        0)
+            if [ -z "$SETUPENV_ID" ]; then
+                # Not in env
+                echo "create-bundle: bundle name was omitted but not in env." >&2
+                exit 1
+            fi
+
+            local file="$(get_lock_file "$SETUPENV_ID")"
+            cp "$file" "$HOME/.setupenv/bundle"
+            echo "Created bundle: $HOME/.setupenv/bundle/$file"    # TODO: More better filename (prompt to user?)
+            ;;
+    esac
+}
+
 escape_subcmd() {
     local i
     local old_ifs="$IFS"
