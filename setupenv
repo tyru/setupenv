@@ -118,9 +118,11 @@ cmd_list() {
 cmd_in() {
     if [ -z "$SETUPENV_ID" ]; then
         echo "Not in env." >&2
+        return 1
     else
         local file=`get_lock_file "$SETUPENV_ID"`
         echo "$SETUPENV_ID: $(cat "$file")"
+        return 0
     fi
 }
 
