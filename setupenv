@@ -85,7 +85,7 @@ cmd_shell() {
         local file=`get_lock_file "$SETUPENV_ID"`
         touch "$file"
         $SHELL    # XXX: Trap error
-        rm "$rm"
+        rm "$file"
     else
         echo "No lib/ dir(s) found. exit." >&2
         exit 1
