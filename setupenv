@@ -78,6 +78,15 @@ cmd_shell() {
 
 
 [ $# = 0 ] && cmd_help
+
 subcmd="$1"
 shift
-cmd_$subcmd "$@"
+if type "cmd_$subcmd" >/dev/null 2>&1; then
+    "cmd_$subcmd" "$@"
+elif which "setupenv-$subcmd"; then
+    "setupenv-$subcmd" "$@"
+else
+    echo "error: Unknown command: $subcmd" >&2
+    echo
+    cmd_help
+fi
