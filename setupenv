@@ -85,6 +85,7 @@ cmd_shell() {
     local changed=$false
 
     if [ ! -z "$SETUPENV_ID" ]; then
+        # In env
         local file="$(get_lock_file "$SETUPENV_ID")"
         echo "Already in env: $(cat "$file")" >&2
         exit 1
@@ -153,6 +154,7 @@ cmd_list() {
 
 cmd_in() {
     if [ -z "$SETUPENV_ID" ]; then
+        # In env
         echo "Not in env." >&2
         return 1
     else
