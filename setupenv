@@ -218,6 +218,27 @@ cmd_create_bundle() {
     esac
 }
 
+expand_bundle() {
+    local bundle="$1"
+    if [ -f "$HOME/.setupenv/bundle/$bundle" ]; then
+        cat "$HOME/.setupenv/bundle/$bundle"
+    else
+        echo "$bundle"
+    fi
+}
+
+cmd_bundle() {
+    [ $# = 0 ] && return
+
+    local bundle shell_args
+    for bundle in "$@"; do
+        shell_args=" $(expand_bundle "$bundle")"
+    done
+
+    # NOTE: $shell_args is separated by whitespaces.
+    cmd_shell $shell_args
+}
+
 escape_subcmd() {
     local i
     local old_ifs="$IFS"
