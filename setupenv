@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# TODO:
-# - Show if current shell is in env
 # XXX:
 # - lib/ and lib/pkgconfig/ directories are fixed path?
 # - ldconfig influences original environment?
@@ -100,6 +98,15 @@ cmd_list() {
     for file in `get_all_lock_files`; do
         echo "$file: $(cat "$file")"
     done
+}
+
+cmd_in() {
+    if [ -z "$SETUPENV_ID" ]; then
+        echo "Not in env." >&2
+    else
+        local file=`get_lock_file "$SETUPENV_ID"`
+        echo "$SETUPENV_ID: $(cat "$file")"
+    fi
 }
 
 
