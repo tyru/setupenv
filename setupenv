@@ -26,8 +26,17 @@ EOM
     exit 1
 }
 
+create_lock_dir() {
+    local dir="/tmp/setupenv"
+    mkdir $dir >/dev/null 2>&1
+    if [ ! -d $dir ]; then
+        echo "Can't create lock dir: $dir" >&2
+        exit 1
+    fi
+}
+
 get_lock_file() {
-    echo "/tmp/setupenv-$1"
+    echo "/tmp/setupenv/$1"
 }
 
 get_lock_id() {
@@ -42,7 +51,7 @@ get_lock_id() {
 }
 
 get_all_lock_files() {
-    echo /tmp/setupenv-*
+    echo /tmp/setupenv/*
 }
 
 cmd_shell() {
@@ -82,10 +91,15 @@ cmd_shell() {
 
     if $changed; then
         echo "spawning new shell($SHELL)..."
+
         export SETUPENV_ID=`get_lock_id`
+
+        create_lock_dir
         local file=`get_lock_file "$SETUPENV_ID"`
         echo "$*" >"$file"
+
         $SHELL    # XXX: Trap error
+
         rm "$file"
     else
         echo "No lib/ dir(s) found. exit." >&2
