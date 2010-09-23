@@ -3,6 +3,10 @@
 # XXX:
 # - lib/ and lib/pkgconfig/ directories are fixed path?
 # - ldconfig influences original environment?
+# TODO:
+# - zsh/bash completion file
+# - "bundle" command
+# - "create-bundle" command
 
 true=:
 false=/bin/false
@@ -25,6 +29,12 @@ cmd_help() {
 
         list
             List all env(s).
+
+        bundle bundle_name [bundle_name2 ...]
+            Expand bundle names and exec "shell" command.
+
+        create-bundle [bundle_name proj_dir [proj_dir2 ...]]
+            Create a bundle.
 
         in
             Show the status whether I'm in env.
