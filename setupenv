@@ -44,7 +44,7 @@ EOM
 
 create_lock_dir() {
     local dir="/tmp/setupenv"
-    mkdir $dir >/dev/null 2>&1
+    mkdir -p $dir
     if [ ! -d $dir ]; then
         echo "Can't create lock dir: $dir" >&2
         exit 1
