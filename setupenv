@@ -57,6 +57,14 @@ get_lock_id() {
 }
 
 get_all_lock_ids() {
+    local dir="/tmp/setupenv"
+    if [ ! -d $dir ]; then
+        echo "get_all_lock_ids: No lock dir exists: $dir"
+        exit 1
+    fi
+
+    [ -z "$(ls /tmp/setupenv)" ] && return
+
     local file
     for file in /tmp/setupenv/*; do
         echo "$(basename "$file")"
@@ -123,8 +131,11 @@ cmd_shell() {
 }
 
 cmd_list() {
+    local ids="$(get_all_lock_ids)"
+    [ -z "$ids" ] && return
+
     local id file
-    for id in "$(get_all_lock_ids)"; do
+    for id in "$ids"; do
         local file="$(get_lock_file "$id")"
         echo "$id: $(cat "$file")"
     done
