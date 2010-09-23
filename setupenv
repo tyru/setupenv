@@ -57,6 +57,12 @@ get_all_lock_files() {
 cmd_shell() {
     local changed=$false
 
+    if [ ! -z "$SETUPENV_ID" ]; then
+        local file="$(get_lock_file "$SETUPENV_ID")"
+        echo "Already in env: $(cat "$file")" >&2
+        exit 1
+    fi
+
     for dir in "$@"; do
         [ -d "$dir" ] || continue
 
