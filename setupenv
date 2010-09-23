@@ -29,6 +29,21 @@ EOM
     exit 1
 }
 
+get_lock_file() {
+    echo "/tmp/setupenv-$1"
+}
+
+get_lock_id() {
+    local id file
+    while $true; do
+        # Trim whitespaces which od outputs.
+        id="$(echo $(od -vAn -N4 -tu4 < /dev/urandom))"
+        file=`get_lock_file "$id"`
+        [ ! -e "$file" ] && break
+    done
+    echo "$id"
+}
+
 cmd_shell() {
     local changed=$false
 
@@ -66,7 +81,11 @@ cmd_shell() {
 
     if $changed; then
         echo "spawning new shell($SHELL)..."
-        $SHELL
+        export SETUPENV_ID=`get_lock_id`
+        local file=`get_lock_file "$SETUPENV_ID"`
+        touch "$file"
+        $SHELL    # XXX: Trap error
+        rm "$rm"
     else
         echo "No lib/ dir(s) found. exit." >&2
         exit 1
