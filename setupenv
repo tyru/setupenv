@@ -5,8 +5,7 @@
 # - ldconfig influences original environment?
 # TODO:
 # - zsh/bash completion file
-# - "bundle" command
-# - "create-bundle" command
+# - Way to remove bundle files.
 
 true=:
 false=/bin/false
