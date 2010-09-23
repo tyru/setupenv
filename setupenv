@@ -164,14 +164,28 @@ cmd_in() {
     fi
 }
 
+escape_subcmd() {
+    local i
+    local old_ifs="$IFS"
+    local firsttime=$true
+    IFS=-
+    for i in $1; do
+        $firsttime || echo -n _
+        firsttime=$false
+        echo -n "$i"
+    done
+    IFS="$old_ifs"
+}
+
 
 
 [ $# = 0 ] && cmd_help
 
 subcmd="$1"
+escaped=`escape_subcmd "$1"`
 shift
-if type "cmd_$subcmd" >/dev/null 2>&1; then
-    "cmd_$subcmd" "$@"
+if type "cmd_$escaped" >/dev/null 2>&1; then
+    "cmd_$escaped" "$@"
 elif which "setupenv-$subcmd"; then
     "setupenv-$subcmd" "$@"
 else
