@@ -178,6 +178,8 @@ create_config_dir() {
 cmd_create_bundle() {
     create_config_dir
 
+    # TODO: -f option which always overwrites $dest.
+
     case $# in
         0)
             if [ -z "$SETUPENV_ID" ]; then
