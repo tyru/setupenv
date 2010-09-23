@@ -186,9 +186,16 @@ cmd_create_bundle() {
                 exit 1
             fi
 
-            local file="$(get_lock_file "$SETUPENV_ID")"
-            cp "$file" "$HOME/.setupenv/bundle"
-            echo "Created bundle: $HOME/.setupenv/bundle/$(basename "$file")"    # TODO: More better filename (prompt to user?)
+            local src="$(get_lock_file "$SETUPENV_ID")"
+            local basename="$(basename "$src")"
+            local dest="$HOME/.setupenv/bundle/$basename"
+            if [ -e "$dest" ]; then
+                echo "error: path '$dest' already exists." >&2
+                exit 1
+            fi
+
+            cp "$src" "$dest"
+            echo "Created bundle: $dest"    # TODO: More better filename (prompt to user?)
             ;;
     esac
 }
