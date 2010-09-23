@@ -84,7 +84,7 @@ cmd_shell() {
         echo "spawning new shell($SHELL)..."
         export SETUPENV_ID=`get_lock_id`
         local file=`get_lock_file "$SETUPENV_ID"`
-        touch "$file"
+        echo "$*" >"$file"
         $SHELL    # XXX: Trap error
         rm "$file"
     else
