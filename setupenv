@@ -23,6 +23,15 @@ changed=$false
 for dir in "$@"; do
     [ -d "$dir" ] || continue
 
+    if [ -d "$dir/bin"  ]; then
+        if [ -z "$PATH" ]; then
+            export PATH="$dir/bin"
+        else
+            export PATH="$dir/bin:$PATH"
+        fi
+        changed=$true
+    fi
+
     if [ -d "$dir/lib" ]; then
         if [ -z "$LD_LIBRARY_PATH" ]; then
             export LD_LIBRARY_PATH="$dir/lib"
