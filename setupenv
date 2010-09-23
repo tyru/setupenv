@@ -8,55 +8,64 @@
 # - lib/ and lib/pkgconfig/ directories are fixed path?
 # - ldconfig influences original environment?
 
+true=:
+false=/bin/false
 
-if [ $# = 0 ]; then
+
+usage() {
     progname="$(dirname "$0")"
     echo "Usage: $progname proj_dir [proj_dir2 ...]" >&2
     exit 1
-fi
+}
 
+cmd_shell() {
+    local changed=$false
 
-true=:
-false=/bin/false
-changed=$false
+    for dir in "$@"; do
+        [ -d "$dir" ] || continue
 
-for dir in "$@"; do
-    [ -d "$dir" ] || continue
-
-    if [ -d "$dir/bin"  ]; then
-        if [ -z "$PATH" ]; then
-            export PATH="$dir/bin"
-        else
-            export PATH="$dir/bin:$PATH"
+        if [ -d "$dir/bin"  ]; then
+            if [ -z "$PATH" ]; then
+                export PATH="$dir/bin"
+            else
+                export PATH="$dir/bin:$PATH"
+            fi
+            changed=$true
         fi
-        changed=$true
-    fi
 
-    if [ -d "$dir/lib" ]; then
-        if [ -z "$LD_LIBRARY_PATH" ]; then
-            export LD_LIBRARY_PATH="$dir/lib"
-        else
-            export LD_LIBRARY_PATH="$dir/lib:$LD_LIBRARY_PATH"
+        if [ -d "$dir/lib" ]; then
+            if [ -z "$LD_LIBRARY_PATH" ]; then
+                export LD_LIBRARY_PATH="$dir/lib"
+            else
+                export LD_LIBRARY_PATH="$dir/lib:$LD_LIBRARY_PATH"
+            fi
+            sudo ldconfig
+            changed=$true
         fi
-        sudo ldconfig
-        changed=$true
-    fi
 
-    if [ -d "$dir/lib/pkgconfig" ]; then
-        if [ -z "$PKG_CONFIG_PATH" ]; then
-            export PKG_CONFIG_PATH="$dir/lib/pkgconfig"
-        else
-            export PKG_CONFIG_PATH="$dir/lib/pkgconfig:$PKG_CONFIG_PATH"
+        if [ -d "$dir/lib/pkgconfig" ]; then
+            if [ -z "$PKG_CONFIG_PATH" ]; then
+                export PKG_CONFIG_PATH="$dir/lib/pkgconfig"
+            else
+                export PKG_CONFIG_PATH="$dir/lib/pkgconfig:$PKG_CONFIG_PATH"
+            fi
+            changed=$true
         fi
-        changed=$true
-    fi
-done
+    done
 
-if $changed; then
-    echo "spawning new shell($SHELL)..."
-    sleep 1
-    $SHELL
-else
-    echo "No lib/ dir(s) found. exit." >&2
-    exit 1
-fi
+    if $changed; then
+        echo "spawning new shell($SHELL)..."
+        sleep 1
+        $SHELL
+    else
+        echo "No lib/ dir(s) found. exit." >&2
+        exit 1
+    fi
+}
+
+
+
+[ $# = 0 ] && usage
+subcmd="$1"
+shift
+cmd_$subcmd "$@"
