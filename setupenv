@@ -3,7 +3,6 @@
 # TODO:
 # - List active env(s)
 # - Show if current shell is in env
-# - -S option: do not sleep
 # XXX:
 # - lib/ and lib/pkgconfig/ directories are fixed path?
 # - ldconfig influences original environment?
@@ -67,7 +66,6 @@ cmd_shell() {
 
     if $changed; then
         echo "spawning new shell($SHELL)..."
-        sleep 1
         $SHELL
     else
         echo "No lib/ dir(s) found. exit." >&2
