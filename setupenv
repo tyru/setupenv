@@ -13,11 +13,11 @@ false=/bin/false
 
 
 cmd_help() {
-    progname="$(dirname "$0")"
+    progname="$(basename "$0")"
     cat <<EOM
     Usage
 
-        $progname command [args ...]
+        $progname {command} [args ...]
 
     Commands
 
