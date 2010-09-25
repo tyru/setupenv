@@ -47,9 +47,6 @@ cmd_help() {
         $ setupenv show
         4256928019: /opt/atk-1.30.0/ /opt/gdk-pixbuf-2.22.0/ /opt/glib-2.27.0/ /opt/gtk+-2.20.0/
 
-
-
-
     COMMANDS
 
         help
