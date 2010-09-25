@@ -14,11 +14,42 @@ false=/bin/false
 cmd_help() {
     progname="$(basename "$0")"
     cat <<EOM
-    Usage
+    USAGE
 
         $progname {command} [args ...]
 
-    Commands
+    SYNOPSIS
+
+        $ setupenv show
+        Not in env.
+        $ setupenv list    # No output
+        $ setupenv shell /opt/*    # Add /opt/*/lib to \$LD_LIBRARY_PATH, etc.
+        spawning new shell(/bin/zsh)...
+        $ # New shell started.
+
+        $ setupenv show
+        4069262909: /opt/atk-1.30.0/ /opt/gdk-pixbuf-2.22.0/ /opt/glib-2.27.0/ /opt/gtk+-2.20.0/
+
+        $ setupenv list    # List all env(s).
+        4069262909: /opt/atk-1.30.0/ /opt/gdk-pixbuf-2.22.0/ /opt/glib-2.27.0/ /opt/gtk+-2.20.0/
+
+        $ setupenv create-bundle gtk+    # Bundle current env.
+        $ setupenv create-bundle gtk+ /opt/*    # Same
+
+        $ setupenv list-bundle
+        gtk+: /opt/atk-1.30.0/ /opt/gdk-pixbuf-2.22.0/ /opt/glib-2.27.0/ /opt/gtk+-2.20.0/
+
+        $ exit    # Exit current env.
+
+        $ setupenv bundle gtk+
+        spawning new shell(/bin/zsh)...
+        $ setupenv show
+        4256928019: /opt/atk-1.30.0/ /opt/gdk-pixbuf-2.22.0/ /opt/glib-2.27.0/ /opt/gtk+-2.20.0/
+
+
+
+
+    COMMANDS
 
         help
             Show help.
