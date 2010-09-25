@@ -204,17 +204,6 @@ cmd_show() {
     fi
 }
 
-create_config_dir() {
-    local dir
-    for dir in "$HOME/.setupenv" "$HOME/.setupenv/bundle"; do
-        mkdir -p "$dir"
-        if [ ! -d "$dir" ]; then
-            echo "Can't create config dir: $dir" >&2
-            exit 1
-        fi
-    done
-}
-
 cmd_create_bundle() {
     # TODO: -f option which always overwrites $dest.
 
@@ -292,6 +281,17 @@ cmd_remove_bundle() {
 
     echo "Removed bundle $bundle: $(cat "$file")"
     rm "$file"
+}
+
+create_config_dir() {
+    local dir
+    for dir in "$HOME/.setupenv" "$HOME/.setupenv/bundle"; do
+        mkdir -p "$dir"
+        if [ ! -d "$dir" ]; then
+            echo "Can't create config dir: $dir" >&2
+            exit 1
+        fi
+    done
 }
 
 escape_subcmd() {
