@@ -35,7 +35,7 @@ cmd_help() {
         create-bundle [bundle_name [proj_dir proj_dir2 ...]]
             Create a bundle.
 
-        in
+        show
             Show the status whether I'm in env.
 EOM
     exit 1
@@ -154,7 +154,7 @@ cmd_list() {
     done
 }
 
-cmd_in() {
+cmd_show() {
     if [ -z "$SETUPENV_ID" ]; then
         # In env
         echo "Not in env." >&2
