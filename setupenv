@@ -237,6 +237,13 @@ cmd_bundle() {
     cmd_shell $shell_args
 }
 
+cmd_list_bundle() {
+    local bundle
+    for bundle in $(ls "$HOME/.setupenv/bundle"); do
+        echo "$bundle: $(cat "$HOME/.setupenv/bundle/$bundle")"
+    done
+}
+
 escape_subcmd() {
     local i
     local old_ifs="$IFS"
