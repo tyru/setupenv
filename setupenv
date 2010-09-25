@@ -159,7 +159,7 @@ cmd_shell() {
     if $changed; then
         echo "spawning new shell($SHELL)..."
 
-        export SETUPENV_ID=`get_lock_id`
+        export SETUPENV_ID="`get_lock_id`"
 
         create_lock_dir
         local file="`get_lock_file "$SETUPENV_ID"`"
