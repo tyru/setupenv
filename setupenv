@@ -216,8 +216,6 @@ create_config_dir() {
 }
 
 cmd_create_bundle() {
-    create_config_dir
-
     # TODO: -f option which always overwrites $dest.
 
     local dest_dir="$HOME/.setupenv/bundle"
@@ -312,6 +310,8 @@ escape_subcmd() {
 
 
 [ $# = 0 ] && cmd_help
+
+create_config_dir
 
 subcmd="$1"
 escaped=`escape_subcmd "$1"`
