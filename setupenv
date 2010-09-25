@@ -64,8 +64,14 @@ cmd_help() {
         bundle bundle_name [bundle_name2 ...]
             Expand bundle names and exec "shell" command.
 
-        create-bundle [bundle_name [proj_dir proj_dir2 ...]]
+        create-bundle [bundle_name [proj_dir ...]]
             Create a bundle.
+
+        list-bundle
+            List bundles.
+
+        remove-bundle bundle_name
+            Remove bundle.
 
         show
             Show the status whether I'm in env.
