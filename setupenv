@@ -6,6 +6,9 @@
 # TODO:
 # - zsh/bash completion file
 # - Way to remove bundle files.
+# -- "remove-bundle" command
+# - Add description of config directory and influenced environment variables.
+# -- Write man file?
 
 true=:
 false=/bin/false
