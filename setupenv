@@ -5,8 +5,6 @@
 # - ldconfig influences original environment?
 # TODO:
 # - zsh/bash completion file
-# - Way to remove bundle files.
-# -- "remove-bundle" command
 # - Add description of config directory and influenced environment variables.
 # -- Write man file?
 
@@ -276,6 +274,20 @@ cmd_list_bundle() {
     for bundle in $(ls "$HOME/.setupenv/bundle"); do
         echo "$bundle: $(cat "$HOME/.setupenv/bundle/$bundle")"
     done
+}
+
+cmd_remove_bundle() {
+    [ $# = 0 ] && return
+    local bundle="$1"
+    local file="$HOME/.setupenv/bundle/$bundle"
+
+    if [ ! -f "$file" ]; then
+        echo "$bundle: No such bundle." >&2
+        exit 1
+    fi
+
+    echo "Removed bundle $bundle: $(cat "$file")"
+    rm "$file"
 }
 
 escape_subcmd() {
