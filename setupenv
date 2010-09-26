@@ -74,7 +74,7 @@ cmd_help() {
 
     FILES
 
-        $HOME/.setupenv/bundle/*
+        ~/.setupenv/bundle/*
             Saved bundles.
 EOM
     exit 1
