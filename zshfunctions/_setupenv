@@ -1,0 +1,27 @@
+#compdef setupenv
+
+
+_setupenv() {
+    compadd help
+    compadd shell
+    compadd list
+    compadd bundle
+    compadd create-bundle
+    compadd list-bundle
+    compadd remove-bundle
+    compadd show
+
+    commands=(
+        'help:Show help'
+        'shell:Add and set up new shell'
+        'list:List all env(s)'
+        'bundle:Expand bundle names and exec "shell" command'
+        'create-bundle:Create a bundle'
+        'list-bundle:List bundles'
+        'remove-bundle:Remove bundle'
+        "show:Show the status whether I'm in env"
+    )
+    _describe -t commands 'setupenv command' commands
+}
+
+_setupenv

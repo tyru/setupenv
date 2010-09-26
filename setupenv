@@ -4,7 +4,6 @@
 # - lib/ and lib/pkgconfig/ directories are fixed path?
 # - ldconfig influences original environment?
 # TODO:
-# - zsh/bash completion file
 # - Write man file?
 
 true=:
