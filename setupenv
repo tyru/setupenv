@@ -50,7 +50,7 @@ cmd_help() {
             Show help.
 
         shell proj_dir [proj_dir2 ...]
-            Add and set up new shell.
+            Add some paths to specific environment variables and set up new shell.
 
         list
             List all env(s).
