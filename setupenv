@@ -59,7 +59,7 @@ cmd_help() {
         bundle bundle_name [bundle_name2 ...]
             Expand bundle names and exec "shell" command.
 
-        create-bundle [bundle_name [proj_dir ...]]
+        create-bundle [-f] [bundle_name [proj_dir ...]]
             Create a bundle.
 
         list-bundle
@@ -206,7 +206,11 @@ cmd_show() {
 }
 
 cmd_create_bundle() {
-    # TODO: -f option which always overwrites $dest.
+    local force=$false
+    if [ $# != 0 -a "$1" = "-f" ]; then
+        force=$true
+        shift
+    fi
 
     local dest_dir="$HOME/.setupenv/bundle"
     case $# in
@@ -223,7 +227,7 @@ cmd_create_bundle() {
             else
                 local dest="$dest_dir/$1"
             fi
-            if [ -e "$dest" ]; then
+            if [ -e "$dest" ] && ! $force; then
                 echo "error: path '$dest' already exists." >&2
                 exit 1
             fi
@@ -233,7 +237,7 @@ cmd_create_bundle() {
             ;;
         *)
             local dest="$dest_dir/$1"
-            if [ -e "$dest" ]; then
+            if [ -e "$dest" ] && ! $force; then
                 echo "error: path '$dest' already exists." >&2
                 exit 1
             fi
