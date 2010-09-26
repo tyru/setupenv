@@ -5,8 +5,7 @@
 # - ldconfig influences original environment?
 # TODO:
 # - zsh/bash completion file
-# - Add description of config directory and influenced environment variables.
-# -- Write man file?
+# - Write man file?
 
 true=:
 false=/bin/false
@@ -72,6 +71,11 @@ cmd_help() {
 
         show
             Show the status whether I'm in env.
+
+    FILES
+
+        $HOME/.setupenv/bundle/*
+            Saved bundles.
 EOM
     exit 1
 }
