@@ -2,7 +2,6 @@
 
 # XXX:
 # - lib/ and lib/pkgconfig/ directories are fixed path?
-# - ldconfig influences original environment?
 # TODO:
 # - Write man file?
 
@@ -172,10 +171,15 @@ cmd_shell() {
             exit 1
         }
 
-        trap "x=$?; rm -f '$file'; exit $x" 0 1 2 3 15
+        # Finalizations
+        trap "rm -f '$file'" 0 1 2 3 15
+        trap "sudo ldconfig" 0 1 2 3 15
+        trap "exit $?" 0 1 2 3 15
+
         $SHELL
 
         rm -f "$file"
+        sudo ldconfig
     else
         echo "No lib/ dir(s) found. exit." >&2
         exit 1
