@@ -232,12 +232,17 @@ cmd_create_bundle() {
             echo "Created bundle: $dest"
             ;;
         *)
-            local bundle_name="$1"
-            shift
-            echo "$*" >"$dest_dir/$bundle_name" || {
-                echo "Could not write to '$dest_dir/$bundle_name'." >&2
+            local dest="$dest_dir/$1"
+            if [ -e "$dest" ]; then
+                echo "error: path '$dest' already exists." >&2
+                exit 1
+            fi
+
+            echo "$*" >"$dest" || {
+                echo "Could not write to '$dest'." >&2
                 exit 1
             }
+            echo "Created bundle: $dest"
             ;;
     esac
 }
