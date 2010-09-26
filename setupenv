@@ -312,14 +312,15 @@ escape_subcmd() {
 
 [ $# = 0 ] && cmd_help
 
-create_config_dir
-
 subcmd="$1"
 escaped=`escape_subcmd "$1"`
 shift
+
 if type "cmd_$escaped" >/dev/null 2>&1; then
+    create_config_dir
     "cmd_$escaped" "$@"
 elif which "setupenv-$subcmd"; then
+    create_config_dir
     "setupenv-$subcmd" "$@"
 else
     echo "error: Unknown command: $subcmd" >&2
