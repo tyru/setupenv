@@ -229,7 +229,7 @@ cmd_create_bundle() {
             fi
 
             cp "$src" "$dest"
-            echo "Created bundle: $dest"    # TODO: More better filename (prompt to user?)
+            echo "Created bundle: $dest"
             ;;
         *)
             local bundle_name="$1"
