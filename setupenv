@@ -217,7 +217,8 @@ cmd_create_bundle() {
         0|1)
             if [ -z "$SETUPENV_ID" ]; then
                 # Not in env
-                echo "create-bundle: bundle name was omitted but not in env." >&2
+                echo "error: create-bundle: proj_dir(s) are omitted but not in env." >&2
+                echo "Usage: create-bundle [-f] [bundle_name [proj_dir ...]]" >&2
                 exit 1
             fi
 
