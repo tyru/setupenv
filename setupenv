@@ -223,20 +223,23 @@ cmd_create_bundle() {
 
             local src="$(get_lock_file "$SETUPENV_ID")"
             if [ $# = 0 ]; then
-                local dest="$dest_dir/$(basename "$src")"
+                local bundle_name="$(basename "$src")"
             else
-                local dest="$dest_dir/$1"
+                local bundle_name="$1"
             fi
+            local dest="$dest_dir/$bundle_name"
             if [ -e "$dest" ] && ! $force; then
                 echo "error: path '$dest' already exists." >&2
                 exit 1
             fi
 
             cp "$src" "$dest"
-            echo "Created bundle: $dest"
+            echo "Created bundle '$bundle_name': $(cat "$dest")"
             ;;
         *)
-            local dest="$dest_dir/$1"
+            local bundle_name="$1"
+            local dest="$dest_dir/$bundle_name"
+
             if [ -e "$dest" ] && ! $force; then
                 echo "error: path '$dest' already exists." >&2
                 exit 1
@@ -246,7 +249,7 @@ cmd_create_bundle() {
                 echo "Could not write to '$dest'." >&2
                 exit 1
             }
-            echo "Created bundle: $dest"
+            echo "Created bundle '$bundle_name': $(cat "$dest")"
             ;;
     esac
 }
