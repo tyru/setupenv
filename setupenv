@@ -334,6 +334,7 @@ subcmd="$1"
 escaped=`escape_subcmd "$1"`
 shift
 
+# FIXME: Do not use type. (checkbashisms)
 if type "cmd_$escaped" >/dev/null 2>&1; then
     create_config_dir
     "cmd_$escaped" "$@"
