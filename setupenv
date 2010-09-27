@@ -342,6 +342,7 @@ elif which "setupenv-$subcmd"; then
     "setupenv-$subcmd" "$@"
 else
     echo "error: Unknown command: $subcmd" >&2
+    sleep 1
     echo
     cmd_help
 fi
