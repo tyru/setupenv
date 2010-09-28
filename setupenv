@@ -8,9 +8,16 @@
 true=:
 false=/bin/false
 
+progname="$(basename "$0")"
 
-cmd_help() {
-    progname="$(basename "$0")"
+
+short_help() {
+    echo "Usage: $progname {command} [args ...]"
+    echo "'$progname -h' to view long help."
+    exit 1
+}
+
+long_help() {
     cat <<EOM
     USAGE
 
@@ -46,7 +53,7 @@ cmd_help() {
 
     COMMANDS
 
-        help
+        help [-s]
             Show help.
 
         shell proj_dir [proj_dir2 ...]
@@ -76,6 +83,23 @@ cmd_help() {
             Saved bundles.
 EOM
     exit 1
+}
+
+cmd_help() {
+
+    local short=$false
+    while getopts s opt; do
+        case $opt in
+            s) short=$true ;;
+            ?) echo "help: Unknown option: -$opt" >&2 ;;
+        esac
+    done
+
+    if $short; then
+        short_help
+    else
+        long_help
+    fi
 }
 
 create_lock_dir() {
@@ -338,14 +362,12 @@ run_command() {
             ;;
         *)
             echo "error: Unknown command: $subcmd" >&2
-            sleep 1
-            echo
-            cmd_help
+            short_help
             ;;
     esac
 }
 
 
 
-[ $# -eq 0 ] && cmd_help
+[ $# -eq 0 ] && short_help
 run_command "$@"
