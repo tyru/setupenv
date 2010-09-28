@@ -326,24 +326,26 @@ escape_subcmd() {
     IFS="$old_ifs"
 }
 
+run_command() {
+    local subcmd="$1"
+    local escaped="`escape_subcmd "$1"`"
+    shift
+
+    case "$subcmd" in
+        help|shell|list|bundle|create-bundle|list-bundle|remove-bundle|show)
+            create_config_dir
+            "cmd_$escaped" ${@+"$@"}
+            ;;
+        *)
+            echo "error: Unknown command: $subcmd" >&2
+            sleep 1
+            echo
+            cmd_help
+            ;;
+    esac
+}
+
 
 
 [ $# -eq 0 ] && cmd_help
-
-subcmd="$1"
-escaped=`escape_subcmd "$1"`
-shift
-
-# FIXME: Do not use type. (checkbashisms)
-if type "cmd_$escaped" >/dev/null 2>&1; then
-    create_config_dir
-    "cmd_$escaped" "$@"
-elif which "setupenv-$subcmd"; then
-    create_config_dir
-    "setupenv-$subcmd" "$@"
-else
-    echo "error: Unknown command: $subcmd" >&2
-    sleep 1
-    echo
-    cmd_help
-fi
+run_command "$@"
