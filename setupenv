@@ -12,8 +12,8 @@ progname="$(basename "$0")"
 
 
 short_help() {
-    echo "Usage: $progname {command} [args ...]"
-    echo "'$progname -h' to view long help."
+    echo "Usage: $progname [-h|--help] {command} [args ...]"
+    echo "'$progname help' to view long help."
     exit 1
 }
 
@@ -21,7 +21,7 @@ long_help() {
     cat <<EOM
     USAGE
 
-        $progname {command} [args ...]
+        $progname [-h|--help] {command} [args ...]
 
     SYNOPSIS
 
@@ -351,6 +351,10 @@ escape_subcmd() {
 }
 
 run_command() {
+    if [ "$1" = "-h" -o "$1" = "--help" ]; then
+        long_help
+    fi
+
     local subcmd="$1"
     local escaped="`escape_subcmd "$1"`"
     shift
