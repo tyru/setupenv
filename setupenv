@@ -77,6 +77,9 @@ long_help() {
         show
             Show the status whether I'm in env.
 
+        run-with [-b] proj_dir1 [proj_dir2 ...] -- program [arg1 ...]
+            Run program with libraries.
+
     FILES
 
         ~/.setupenv/bundle/*
@@ -141,7 +144,8 @@ get_all_lock_ids() {
     done
 }
 
-cmd_shell() {
+set_up_projects() {
+    [ $# = 0 ] && $false
     local changed=$false
 
     if [ ! -z "$SETUPENV_ID" ]; then
@@ -152,7 +156,10 @@ cmd_shell() {
     fi
 
     for dir in "$@"; do
-        [ -d "$dir" ] || continue
+        if [ ! -d "$dir" ]; then
+            echo "warning: '$dir' is not directory." >&2
+            continue
+        fi
 
         if [ -d "$dir/bin"  ]; then
             if [ -z "$PATH" ]; then
@@ -183,31 +190,34 @@ cmd_shell() {
         fi
     done
 
-    if $changed; then
-        echo "spawning new shell($SHELL)..."
+    $changed
+}
 
-        export SETUPENV_ID="`get_lock_id`"
-
-        create_lock_dir
-        local file="`get_lock_file "$SETUPENV_ID"`"
-        echo "$*" >"$file" || {
-            echo "Could not write to '$file'." >&2
-            exit 1
-        }
-
-        # Finalizations
-        trap "rm -f '$file'" 0 HUP INT QUIT TERM
-        trap "sudo ldconfig" 0 HUP INT QUIT TERM
-        trap "exit $?" 0 HUP INT QUIT TERM
-
-        $SHELL
-
-        rm -f "$file"
-        sudo ldconfig
-    else
+cmd_shell() {
+    set_up_projects ${@+"$@"} || {
         echo "No lib/ dir(s) found. exit." >&2
         exit 1
-    fi
+    }
+
+    echo "spawning new shell($SHELL)..."
+
+    export SETUPENV_ID="`get_lock_id`"
+    create_lock_dir
+    local file="`get_lock_file "$SETUPENV_ID"`"
+    echo "$*" >"$file" || {
+        echo "Could not write to '$file'." >&2
+        exit 1
+    }
+
+    # Finalizations
+    trap "rm -f '$file'" 0 HUP INT QUIT TERM
+    trap "sudo ldconfig" 0 HUP INT QUIT TERM
+    trap "exit $?" 0 HUP INT QUIT TERM
+
+    "$SHELL"    # TODO: exec
+
+    rm -f "$file"
+    sudo ldconfig
 }
 
 cmd_list() {
@@ -326,6 +336,67 @@ cmd_remove_bundle() {
     rm "$file"
 }
 
+cmd_run_with() {
+    # TODO
+    local expand_bundle=$false
+    if [ $# -ne 0 -a "$1" = "-b" ]; then
+        expand_bundle=$true
+        shift
+    fi
+
+    local projects
+    while [ $# -ne 0 ]; do
+        if [ "$1" = '--' ]; then
+            shift
+            break
+        fi
+        if [ -z "$projects" ]; then
+            projects="'$1'"
+        else
+            projects="$projects '$1'"
+        fi
+        shift
+    done
+    if [ -z "$projects" ]; then
+        echo "run-with: No project dir(s) given." >&2
+        exit 1
+    fi
+
+    if [ $# = 0 ]; then
+        echo "run-with: No program arguments given." >&2
+        exit 1
+    fi
+    local program="$1"
+    shift
+    if [ ! -x "$program" ] && ! which "$program" >/dev/null 2>&1; then
+        echo "'$program' is not executable and not in the PATH." >&2
+        exit 1
+    fi
+
+    eval "set_up_projects $projects" || {
+        echo "No lib/ dir(s) found. exit." >&2
+        exit 1
+    }
+
+    export SETUPENV_ID="`get_lock_id`"
+    create_lock_dir
+    local file="`get_lock_file "$SETUPENV_ID"`"
+    eval echo "$projects" >"$file" || {
+        echo "Could not write to '$file'." >&2
+        exit 1
+    }
+
+    # Finalizations
+    trap "rm -f '$file'" 0 HUP INT QUIT TERM
+    trap "sudo ldconfig" 0 HUP INT QUIT TERM
+    trap "exit $?" 0 HUP INT QUIT TERM
+
+    "$program" ${@+"$@"}    # TODO: exec
+
+    rm -f "$file"
+    sudo ldconfig
+}
+
 create_config_dir() {
     local dir
     for dir in "$HOME/.setupenv" "$HOME/.setupenv/bundle"; do
@@ -360,7 +431,7 @@ run_command() {
     shift
 
     case "$subcmd" in
-        help|shell|list|bundle|create-bundle|list-bundle|remove-bundle|show)
+        help|shell|list|bundle|create-bundle|list-bundle|remove-bundle|show|run-with)
             create_config_dir
             "cmd_$escaped" ${@+"$@"}
             ;;
