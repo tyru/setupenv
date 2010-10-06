@@ -337,7 +337,6 @@ cmd_remove_bundle() {
 }
 
 cmd_run_with() {
-    # TODO
     local expand_bundle=$false
     if [ $# -ne 0 -a "$1" = "-b" ]; then
         expand_bundle=$true
@@ -350,10 +349,22 @@ cmd_run_with() {
             shift
             break
         fi
-        if [ -z "$projects" ]; then
-            projects="'$1'"
+
+        if $expand_bundle; then
+            local p
+            for p in `expand_bundle "$1"`; do
+                if [ -z "$projects" ]; then
+                    projects="'$p'"
+                else
+                    projects="$projects '$p'"
+                fi
+            done
         else
-            projects="$projects '$1'"
+            if [ -z "$projects" ]; then
+                projects="'$1'"
+            else
+                projects="$projects '$1'"
+            fi
         fi
         shift
     done
