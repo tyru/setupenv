@@ -56,7 +56,7 @@ long_help() {
         help [-s]
             Show help.
 
-        shell proj_dir [proj_dir2 ...]
+        shell proj_dir1 [proj_dir2 ...]
             Add some paths to specific environment variables and set up new shell.
 
         list
@@ -65,7 +65,7 @@ long_help() {
         bundle bundle_name [bundle_name2 ...]
             Expand bundle names and exec "shell" command.
 
-        create-bundle [-f] [bundle_name [proj_dir ...]]
+        create-bundle [-f] [bundle_name [proj_dir1 ...]]
             Create a bundle.
 
         list-bundle
@@ -246,7 +246,7 @@ cmd_create_bundle() {
             if [ -z "$SETUPENV_ID" ]; then
                 # Not in env
                 echo "error: create-bundle: proj_dir(s) are omitted but not in env." >&2
-                echo "Usage: create-bundle [-f] [bundle_name [proj_dir ...]]" >&2
+                echo "Usage: create-bundle [-f] [bundle_name [proj_dir1 ...]]" >&2
                 exit 1
             fi
 
